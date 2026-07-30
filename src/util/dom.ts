@@ -75,6 +75,20 @@ export function getPointerOffsetY(
   return getIsomorphicClientY(event) - viewportToElOffsetY;
 }
 
+export function isPointerWithinRect(
+  event: MouseEvent | PointerEvent,
+  el: HTMLElement,
+) {
+  const rect = el.getBoundingClientRect();
+
+  return (
+    event.clientX >= rect.left &&
+    event.clientX <= rect.right &&
+    event.clientY >= rect.top &&
+    event.clientY <= rect.bottom
+  );
+}
+
 export function getScrollZones(
   event: MouseEvent | TouchEvent,
   el: HTMLElement,
