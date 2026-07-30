@@ -15,6 +15,7 @@
     blockEndDecoration,
     isActive = false,
     use = [],
+    ondblclick,
     onpointerup,
   }: {
     isActive?: boolean;
@@ -22,6 +23,7 @@
     bottomDecoration?: Snippet;
     blockEndDecoration?: Snippet;
     use?: HTMLActionArray;
+    ondblclick?: () => void;
     onpointerup?: (event: PointerEvent) => void;
   } = $props();
 </script>
@@ -32,6 +34,7 @@
     ? "var(--shadow-stationary), var(--shadow-border-accent)"
     : ""}
   {blockEndDecoration}
+  {ondblclick}
   {onpointerup}
   {task}
   use={[...use, hoverPreview(task)]}
