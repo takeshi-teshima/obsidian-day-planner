@@ -3,7 +3,11 @@
   import { on } from "svelte/events";
 
   import { getObsidianContext } from "../../context/obsidian-context";
-  import { createAutoScroll, getScrollZones } from "../../util/dom";
+  import {
+    createAutoScroll,
+    getScrollZones,
+    isPointerWithinRect,
+  } from "../../util/dom";
 
   const {
     children,
@@ -37,17 +41,30 @@
       },
     };
   }
+
+  /**
+   * Controls like the drag/resize handles are rendered via a portal, so
+   * they aren't descendants of this element and native mouseenter/mouseleave
+   * treat hovering them as leaving the scroller. Tracking the pointer's
+   * screen position instead of DOM ancestry keeps "now" from auto-scrolling
+   * away while the cursor is still visually over the timeline.
+   */
+  function trackCursorOverArea(node: HTMLElement) {
+    const off = on(window, "pointermove", (event: PointerEvent) => {
+      isUnderCursor = isPointerWithinRect(event, node);
+    });
+
+    return {
+      destroy() {
+        off();
+      },
+    };
+  }
 </script>
 
 <div
   bind:this={el}
   class={["scroller", rest.class]}
-  onmouseenter={() => {
-    isUnderCursor = true;
-  }}
-  onmouseleave={() => {
-    isUnderCursor = false;
-  }}
   onpointerleave={stopScroll}
   onpointermove={(event) => {
     if (!$editOperation || !el) {
@@ -66,6 +83,7 @@
   }}
   {onscroll}
   use:blockPanOnEdit
+  use:trackCursorOverArea
 >
   {@render children(isUnderCursor)}
 </div>
