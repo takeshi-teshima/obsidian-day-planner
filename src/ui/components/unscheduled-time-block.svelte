@@ -24,10 +24,11 @@
   </TimeBlockBase>
 {:else}
   <TimeBlockControls {task}>
-    {#snippet timeBlock({ isActive, onPointerUp, use })}
+    {#snippet timeBlock({ isActive, onDoubleClick, onPointerUp, use })}
       <LocalTimeBlock
         {bottomDecoration}
         {isActive}
+        ondblclick={onDoubleClick}
         onpointerup={onPointerUp}
         {task}
         {use}

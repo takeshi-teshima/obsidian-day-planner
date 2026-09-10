@@ -15,6 +15,7 @@
 
   interface TimeBlockProps {
     isActive: boolean;
+    onDoubleClick: () => void;
     onPointerUp: (event: PointerEvent) => void;
     use: HTMLActionArray;
   }
@@ -70,6 +71,14 @@
       contents: `${createMarkdownListTokens(task)} ${lineStart}${next}`,
     });
   }
+
+  async function revealTaskInFile() {
+    if (task.source === "unwritten") {
+      return;
+    }
+
+    await workspaceFacade.revealLocation(task);
+  }
 </script>
 
 <Selectable
@@ -89,6 +98,7 @@
       {#snippet anchor(floatingControls)}
         {@render timeBlock({
           isActive: selectable.state !== "none",
+          onDoubleClick: revealTaskInFile,
           onPointerUp: selectable.onpointerup,
           use: [...selectable.use, ...floatingControls.actions],
         })}

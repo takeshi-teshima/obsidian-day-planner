@@ -11,10 +11,12 @@
     blockEndDecoration?: Snippet;
     task: TimeBlock;
     use?: ActionArray;
+    ondblclick?: () => void;
     onpointerup?: (event: PointerEvent) => void;
   }
 
   const {
+    ondblclick,
     onpointerup,
     children,
     blockEndDecoration,
@@ -40,6 +42,7 @@
       task.truncated?.includes("right") && "truncated-right",
       task.truncated?.includes("bottom") && "truncated-bottom",
     ]}
+    {ondblclick}
     {onpointerup}
     use:useActions={use}
   >
